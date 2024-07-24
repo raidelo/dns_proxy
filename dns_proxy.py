@@ -116,7 +116,7 @@ if __name__ == '__main__':
     if args.use_args:
         address, port, upstream, timeout, log, log_prefix = args.address, args.port, args.upstream, args.timeout, args.log, args.log_prefix
 
-    upstream_address, _, upstream_port = args.upstream.partition(':')
+    upstream_address, _, upstream_port = upstream.partition(':')
     upstream_port = int(upstream_port or 53)
     print('Server started at %s:%d'%(address, port))
     main((address, port), (upstream_address, upstream_port), timeout, log, log_prefix, map_)
