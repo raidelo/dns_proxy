@@ -109,7 +109,7 @@ if __name__ == '__main__':
             upstream = c_parser.get('SAVED', 'upstream')
             timeout = c_parser.getint('SAVED', 'timeout')
             log = c_parser.get('SAVED', 'log')
-            log_prefix = c_parser.get('SAVED', 'log_prefix')
+            log_prefix = c_parser.getboolean('SAVED', 'log_prefix')
             map_ = get_section_without_defaults(c_parser, 'MAP')
         else:
             args.use_args = True
