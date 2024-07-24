@@ -6,7 +6,11 @@ def main(local_server_address=('0.0.0.0', 53), dns_server_address=('1.1.1.1', 53
     resolver = ProxyResolver(*dns_server_address, timeout=timeout)
     logger = DNSLogger(log, log_prefix)
     server_ = DNSServer(resolver, *local_server_address, logger=logger, handler=DNSHandler)
-    server_.start()
+    try:
+        server_.start()
+    except KeyboardInterrupt:
+        print('Keyboard Interrupt detected. Closing...')
+        exit(0)
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
