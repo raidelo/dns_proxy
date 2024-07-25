@@ -1,9 +1,9 @@
 # Python DNS Proxy Server
 
 ## Modo de uso:
-El script tomará los argumentos por defecto si es que no hay un archivo de configuración. Si el archivo existe, se tomará la configuración del mismo. Si se especifica el parámetro --use-args, se forzará el uso de los argumentos pasados al script por la línea de comandos. El archivo de configuración se puede crear con el parámetro --save-config, el cual guardará en el archivo todos los valores pasados como argumento. Si no se pasó algún parámetro, se tomará el que es por defecto.
+El script tomará los argumentos que el usuario le pase por consola si es que no existe un archivo de configuración próximo al script. Si el usuario no introduce algún argumento, se tomará el valor por defecto de ese parámetro. Si el archivo de configuración existe, se tomarán los valores del mismo ignorando así los argumentos pasados por la línea de comandos, a menos que se especifique la flag --use-args, la cual forzará al script a usar los argumentos pasados por consola. El archivo de configuración se puede crear al introducir el parámetro --save-config, el cual guardará en el archivo todos los valores pasados como argumento. Cada parámetro tomará su valor por defecto si es que el usuario no introduce el argumento.
 
-El mapa indicado abajo en el archivo de configuarción de ejemplo, será utilizado para asignarle una IP a un dominio dado. Si en el lugar del dominio, aparece una palabra, por ejemplo, ip, precedido por el carácter $, no se tomará en cuenta ese dominio. Esto es para poder crear una variable y asignarla a un dominio de la siguiente forma: dominio = %($ip)s
+El mapa indicado abajo en el archivo de configuración de ejemplo, será utilizado para asignarle una IP a un dominio dado. Si en el lugar del dominio, aparece una palabra, por ejemplo, ip, precedido por el carácter $, no se tomará en cuenta ese dominio. Esto es, por ejemplo, para poder crear una variable y asignarla a un dominio de la siguiente forma: dominio = %($ip)s
 
 ## Parámetros:
 
@@ -13,17 +13,17 @@ El mapa indicado abajo en el archivo de configuarción de ejemplo, será utiliza
 
 - -u, --upstream \<address>:\<port> : Servidor DNS de destino. Por defecto 1.1.1.1 por el puerto 53.
 
-- -t, --timeout : Tiempo máximo a esperar por la respuesta del servidor de destino. Por defecto 5 segundos.
+- -t, --timeout : Tiempo máximo a esperar por la respuesta del servidor de destino. Por defecto 5 segundos. Si pasa ese tiempo, el servidor proxy enviará la respuesta NXDOMAIN (Non-Existent Domain).
 
 - --log \<log_format>: Formato de salida en consola de las peticiones y respuestas hechas por el servidor.
 
 - --log-prefix : Si incluir en los logs la hora del evento y otros metadatos.
 
-- --save-config [config_file_path] : Si se especifica, se guardarán todos los argumentos introducidos por consola en un archivo de configuración. De otra manera, no se guarda ninguna configuración. Si no se especifica un argumento, se toma por defecto el archivo dns_proxy_settings.ini
+- --save-config [config_file_path] : Si se especifica, se guardarán todos los argumentos introducidos por consola (excepto --save-config y --use-args) en un archivo de configuración con nombre por defecto. Si no se especifica un argumento, se toma por defecto el archivo dns_proxy_settings.ini
 
-- --use-args : Si se especifica, se usarán los argumentos introducidos por consola y se ignorará el archivo de configuración. Por defecto se utiliza el archivo de configuración.
+- --use-args : Actúa como flag. Si se especifica, se usarán los argumentos introducidos por consola y se ignorarán los valores contenidos en el archivo de configuración. Por defecto se utiliza el archivo de configuración al leer los valores.
 
-- -m, --map \<dominio:ip> : Si se especifica, debe pasarse almenos un par dominio:ip. Cuando se haga una petición por el dominio dado, se responderá con la ip dada.
+- -m, --map \<dominio:ip> : Si se especifica, debe pasarse como argumento almenos un par \<dominio:ip>. Si se pasarán mas de un par, deben ir separados o por comas, o por espacios. Cuando se haga una petición por el/los dominio/s dado/s, se responderá con la ip dada.
 
 ### Ejemplo de archivo de configuración .ini
 ```
