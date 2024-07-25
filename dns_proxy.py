@@ -26,7 +26,6 @@ class MainResolver(ProxyResolver):
         super().__init__(address, port, timeout, strip_aaaa)
     
     def resolve(self, request, handler):
-        print(request.q.qtype)
         if any([self.get_domain(request.q.qname) == domain for domain in self.map.keys()]):
             reply = request.reply()
             domain = self.get_domain(request.q.qname)
