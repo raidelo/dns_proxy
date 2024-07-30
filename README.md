@@ -5,6 +5,8 @@ El script tomará los argumentos que el usuario le pase por consola si es que no
 
 El mapa indicado abajo en el archivo de configuración de ejemplo, será utilizado para asignarle una IP a un dominio dado. Si en el lugar del dominio, aparece una palabra, por ejemplo, ip, precedido por el carácter $, no se tomará en cuenta ese dominio. Esto es, por ejemplo, para poder crear una variable y asignarla a un dominio de la siguiente forma: dominio = %($ip)s
 
+La sección [EXCEPTIONS] del archivo de configuración será utilizada para verificar si la IP desde donde se hace la petición coincide con la IP a la que está mapeado el dominio por el que se pregunta. Si es así, se forzará al servidor DNS proxy local a hacerle una petición al servidor DNS remoto por ese dominio, incluso si ese dominio está manualmente mapeado a esa misma dirección IP en la sección [MAP]. Si otro IP pregunta por ese dominio, se le responderá de acuerdo al contenido de la sección [MAP]. El funcionamiento del carácter $ es igual que el de la sección [MAP]
+
 ## Parámetros:
 
 - port : Puerto local por el cual el servidor estará a la escucha. Por defecto 53.
@@ -25,6 +27,8 @@ El mapa indicado abajo en el archivo de configuración de ejemplo, será utiliza
 
 - -m, --map \<dominio:ip> : Si se especifica, debe pasarse como argumento almenos un par \<dominio:ip>. Si se pasarán mas de un par, deben ir separados o por comas, o por espacios. Cuando se haga una petición por el/los dominio/s dado/s, se responderá con la ip dada.
 
+- -x, --exceptions \<dominio:ip> : El paso de argumentos es igual al del parámetro --map. Cuando se haga una petición por el/los dominio/s dado/s, se verificará si el cliente que hace la petición coincide con el valor de la IP a la que está asignado el dominio de la petición. Si es así, obligará al servidor proxy local a hacer una petición por ese dominio al servidor DNS base, incluso si está manualmente asignado a esa misma IP en el archivo de configuración.
+
 ### Ejemplo de archivo de configuración .ini
 ```
 [DEFAULT]
@@ -44,4 +48,24 @@ $ip = 192.168.1.10
 personal.domain1 = %($ip)s
 personal.domain2 = 192.168.42.86
 www.personal.domain3 = 192.168.1.1
+
+[EXCEPTIONS]
+www.personal.domain3 = 192.168.42.86
+```
+
+## Ejemplo de utilización:
+```
+Usuario con IP 192.168.1.10 pregunta por el dominio personal.domain1
+Servidor local responde a 192.168.1.10: personal.domain1 está en 192.168.1.10
+
+Usuario con IP 192.168.1.12 pregunta por el dominio personal.domain5
+Servidor local pregunta a servidor remoto por el dominio personal.domain5
+Servidor local responde a 192.168.1.12 con la respuesta del servidor remoto
+
+Usuario con IP 192.168.42.85 pregunta por el dominio www.personal.domain3
+Servidor local responde a 192.168.42.85: www.personal.domain3 está en 192.168.1.1
+
+Usuario con IP 192.168.42.86 pregunta por el dominio www.personal.domain3
+Servidor local pregunta a servidor remoto por el dominio www.personal.domain3
+Servidor local responde a 192.168.42.86 con la respuesta del servidor remoto
 ```
