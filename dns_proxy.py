@@ -53,32 +53,34 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('-b', '-a', '--bind', '--address', default='0.0.0.0', metavar='ADDRESS', dest='address',
                         help='bind to this address '
-                             '(default: all interfaces)')
+                        '(default: all interfaces)')
     parser.add_argument('port', default=53, type=int, nargs='?',
                         help='bind to this port '
-                             '(default: %(default)s)')
+                        '(default: %(default)s)')
     parser.add_argument('-u', '--upstream', default='1.1.1.1:53', metavar='<dns server:port>', dest='upstream',
                         help='upstream DNS server:port '
-                             '(default: %(default)s)')
-    parser.add_argument('-t', '--timeout', default=5, dest='timeout', type=int,
+                        '(default: %(default)s)')
+    parser.add_argument('-t', '--timeout', default=5, type=int, dest='timeout',
                         help='timeout for the server to resolve queries '
-                             '(default: %(default)s)')
+                        '(default: %(default)s)')
     parser.add_argument('--log', default='request,reply,truncated,error', dest='log',
-                        help='log hooks to enable (default: +request,+reply,+truncated,+error,-recv,-send,-data)')
+                        help='log hooks to enable '
+                        '(default: +request,+reply,+truncated,+error,-recv,-send,-data)')
     parser.add_argument('--log-prefix', action='store_true', default=False, dest='log_prefix',
-                        help='log prefix (timestamp/handler/resolver) (default: False)')
+                        help='log prefix (timestamp/handler/resolver) '
+                        '(default: %(default)s)')
     parser.add_argument('--save-config', nargs='?', default=False, const='dns_proxy_settings.ini', type=str, dest='save_config',
-                        help='whether to save specified arguments to a config file for load on next start'
-                             '(default: %(default)s)')
+                        help='whether to save specified arguments to a config file for load on next start '
+                        '(default: %(default)s)')
     parser.add_argument('--use-args', action='store_true', default=False, dest='use_args',
-                        help='whether to use by default the arguments passedto the script or \'dns_proxy_settings.ini\' file'
-                             '(default: config file)')
+                        help='whether to use by default the arguments passedto the script or \'dns_proxy_settings.ini\' file '
+                        '(default: config file)')
     parser.add_argument('-m', '--map', nargs='+', default={}, metavar='<domain:ip domain:ip ...>', dest='map',
-                        help='a map like: domain:ip,domain:ip or separated by spaces like: domain:ip domain:ip. It will answer the query for the domain with the given IP address'
-                             '(default: %(default)s)')
+                        help='a map like: domain:ip,domain:ip or separated by spaces like: domain:ip domain:ip. It will answer the query for the domain with the given IP address '
+                        '(default: %(default)s)')
     parser.add_argument('-x', '--exceptions', nargs='+', default={}, metavar='<domain:ip domain:ip ...>', dest='exceptions',
                         help='similar to parameter --map. If the client\'s IP address matches the given ip and the client is asking for the given domain, the local server will be forced to ask the upstream DNS server for that domain, even if that domain is manually mapped to the specified IP in the MAP section '
-                             '(default: %(default)s)')
+                        '(default: %(default)s)')
     args = parser.parse_args()
 
     defaults = {'address':'0.0.0.0',
