@@ -19,7 +19,7 @@ Para ambas secciones: Si en el lugar del dominio, aparece una palabra, por ejemp
 
 - -t, --timeout : Tiempo máximo a esperar por la respuesta del servidor de destino. Por defecto 5 segundos. Si pasa ese tiempo, el servidor proxy enviará la respuesta NXDOMAIN (Non-Existent Domain).
 
-- --log \<log_format>: Formato de salida en consola de las peticiones y respuestas hechas por el servidor.
+- --log-format \<log_format>: Formato de salida en consola de las peticiones y respuestas hechas por el servidor.
 
 - --log-prefix : Si incluir en los logs la hora del evento y otros metadatos.
 
@@ -34,6 +34,13 @@ Para ambas secciones: Si en el lugar del dominio, aparece una palabra, por ejemp
 
 - -x, --exceptions \<dominio:ip> : El paso de argumentos es igual al del parámetro --map.
 
+- --logs-file \<logs_file> : Archivo en el cual guardar los registros de peticiones y respuestas que maneje el proxy. Se comportará de la siguiente manera:
+    1. No se especifica la flag ni su argumento: Se guardarán los logs en un archivo con nombre por defecto `dns_logs.log`.
+    2. Se especifica la flag con su argumento:
+        - El argumento está dentro de los valores `[true, 1, activate, on]`: Se guardarán los logs en un archivo con nombre por defecto `dns_logs.log`.
+        - El argumento está dentro de los valores `[false, 0, deactivate, off]`: No se guardarán los logs en un archivo.
+        - El argumento no está dentro de los valores anteriores: Se usará ese nombre de archivo como el nombre del archivo de logs.
+
 ### Ejemplo de archivo de configuración .ini
 ```ini
 [DEFAULT]
@@ -41,8 +48,9 @@ address = 0.0.0.0
 port = 53
 upstream = 1.1.1.1:53
 timeout = 5
-log = request,reply,truncated,error
+log_format = request,reply,truncated,error
 log_prefix = False
+logs_file = name_of_logs_file.log
 
 [SAVED]
 address = 192.168.1.2
