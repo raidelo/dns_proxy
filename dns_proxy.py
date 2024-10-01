@@ -167,40 +167,44 @@ if __name__ == "__main__":
                         "(default: %(default)s)")
     args = parser.parse_args()
 
-    map_ = get_mapping(args.map)
-    exceptions_ = get_mapping(args.exceptions)
+    c_parser = ConfigParser(defaults=defaults)
+    config_file_route = args.save_config if args.save_config else "dns_proxy_settings.ini"
+    for section in ("SAVED", "MAP", "EXCEPTIONS"):
+        c_parser.add_section(section)
 
-    if args.save_config or not args.use_args:
-        c_parser = ConfigParser(defaults=defaults)
-        for section in ("SAVED", "MAP", "EXCEPTIONS"):
-            c_parser.add_section(section)
-        config_file_route = args.save_config if args.save_config else "dns_proxy_settings.ini"
-        if args.save_config:
-            for arg, xdefect_value in defaults.items():
-                dict_args = dict(args._get_kwargs())
-                if dict_args[arg] != xdefect_value:
-                    c_parser.set("SAVED", arg, str(dict_args[arg]))
-            if map_:
-                c_parser["MAP"] = map_
-            if exceptions_:
-                c_parser["EXCEPTIONS"] = exceptions_
-            with open(config_file_route, "w") as file:
-                c_parser.write(file)
+    if args.save_config:
+        for arg, xdefect_value in defaults.items():
+            dict_args = dict(args._get_kwargs())
+            if dict_args[arg] != xdefect_value:
+                c_parser.set("SAVED", arg, str(dict_args[arg]))
+        map_ = get_mapping(args.map)
+        if map_:
+            c_parser["MAP"] = map_
+        exceptions_ = get_mapping(args.exceptions)
+        if exceptions_:
+            c_parser["EXCEPTIONS"] = exceptions_
+        with open(config_file_route, "w") as file:
+            c_parser.write(file)
 
-        if not args.use_args:
+    if not args.use_args:
+        if not args.save_config:
             found_ = c_parser.read(config_file_route)
-            if found_:
-                address = c_parser.get("SAVED", "address")
-                port = c_parser.getint("SAVED", "port")
-                upstream = c_parser.get("SAVED", "upstream")
-                timeout = c_parser.getint("SAVED", "timeout")
-                log_format = c_parser.get("SAVED", "log_format")
-                log_prefix = c_parser.getboolean("SAVED", "log_prefix")
-                logs_file = c_parser.get("SAVED", "logs_file")
-                map_ = get_section_without_defaults(c_parser, "MAP")
-                exceptions_ = get_section_without_defaults(c_parser, "EXCEPTIONS")
-            else:
-                args.use_args = True
+        else:
+            found_ = 1
+
+        if found_:
+            address = c_parser.get("SAVED", "address")
+            port = c_parser.getint("SAVED", "port")
+            upstream = c_parser.get("SAVED", "upstream")
+            timeout = c_parser.getint("SAVED", "timeout")
+            log_format = c_parser.get("SAVED", "log_format")
+            log_prefix = c_parser.getboolean("SAVED", "log_prefix")
+            logs_file = c_parser.get("SAVED", "logs_file")
+            map_ = get_section_without_defaults(c_parser, "MAP")
+            exceptions_ = get_section_without_defaults(c_parser, "EXCEPTIONS")
+        else:
+            args.use_args = True
+
     if args.use_args:
         address = args.address
         port = args.port
@@ -209,6 +213,8 @@ if __name__ == "__main__":
         log_format = args.log_format
         log_prefix = args.log_prefix
         logs_file = args.logs_file
+        map_ = get_mapping(args.map)
+        exceptions_ = get_mapping(args.exceptions)
 
     upstream_address, _, upstream_port = upstream.partition(":")
     upstream_port = int(upstream_port or 53)
