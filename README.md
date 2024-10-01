@@ -23,7 +23,10 @@ Para ambas secciones: Si en el lugar del dominio, aparece una palabra, por ejemp
 
 - --log-prefix : Si incluir en los logs la hora del evento y otros metadatos.
 
-- --save-config [config_file_path] : Si se especifica, se guardarán todos los argumentos introducidos por consola (excepto --save-config y --use-args) en un archivo de configuración con nombre por defecto. Si no se especifica un argumento, se toma por defecto el archivo dns_proxy_settings.ini
+- --save-config [config_file_path] : Archivo en el cual guardar los valores de los argumentos pasados al script (excepto --save-config y --use-args). Se comportará de la siguiente manera:
+    1. No se especifica la flag ni su argumento: No se guardará la configuración en un archivo.
+    2. Se especifica la flag pero no su argumento: Se guardará la configuración en un archivo con nombre por defecto `dns_proxy_settings.ini`.
+    3. Se especifica la flag con su argumento: Se usará ese nombre de archivo como el nombre del archivo de configuración.
 
 - --use-args : Actúa como flag. Si se especifica, se usarán los argumentos introducidos por consola y se ignorarán los valores contenidos en el archivo de configuración. Por defecto se utiliza el archivo de configuración al leer los valores.
 
@@ -32,7 +35,7 @@ Para ambas secciones: Si en el lugar del dominio, aparece una palabra, por ejemp
 - -x, --exceptions \<dominio:ip> : El paso de argumentos es igual al del parámetro --map.
 
 ### Ejemplo de archivo de configuración .ini
-```
+```ini
 [DEFAULT]
 address = 0.0.0.0
 port = 53
@@ -55,19 +58,19 @@ www.personal.domain3 = 192.168.1.1
 www.personal.domain3 = 192.168.42.86
 ```
 
-## Ejemplo de funcionamiento:
+## Ejemplo de funcionamiento (tomando en cuenta la configuración anterior):
 ```
-Usuario con IP 192.168.1.10 pregunta por el dominio personal.domain1
-Servidor local responde a 192.168.1.10: personal.domain1 está en 192.168.1.10
+IP <192.168.1.10> pregunta por el dominio <personal.domain1>
+DNSProxy responde a <192.168.1.10>: <personal.domain1> está en <192.168.1.10>
 
-Usuario con IP 192.168.1.12 pregunta por el dominio personal.domain5
-Servidor local pregunta a servidor remoto por el dominio personal.domain5
-Servidor local responde a 192.168.1.12 con la respuesta del servidor remoto
+IP <192.168.1.12> pregunta por el dominio <personal.domain5>
+DNSProxy pregunta a servidor remoto <8.8.8.8> por el dominio <personal.domain5>
+DNSProxy responde a <192.168.1.12> con la respuesta del servidor remoto <8.8.8.8>
 
-Usuario con IP 192.168.42.85 pregunta por el dominio www.personal.domain3
-Servidor local responde a 192.168.42.85: www.personal.domain3 está en 192.168.1.1
+IP <192.168.42.85> pregunta por el dominio <www.personal.domain3>
+DNSProxy responde a <192.168.42.85>: <www.personal.domain3> está en <192.168.1.1>
 
-Usuario con IP 192.168.42.86 pregunta por el dominio www.personal.domain3
-Servidor local pregunta a servidor remoto por el dominio www.personal.domain3
-Servidor local responde a 192.168.42.86 con la respuesta del servidor remoto
+IP <192.168.42.86> pregunta por el dominio <www.personal.domain3>
+DNSProxy pregunta a servidor remoto <8.8.8.8> por el dominio <www.personal.domain3>
+DNSProxy responde a <192.168.42.86> con la respuesta del servidor remoto <8.8.8.8>
 ```
