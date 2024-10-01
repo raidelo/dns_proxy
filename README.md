@@ -19,7 +19,7 @@ Para ambas secciones: Si en el lugar del dominio, aparece una palabra, por ejemp
 
 - -t, --timeout : Tiempo máximo a esperar por la respuesta del servidor de destino. Por defecto 5 segundos. Si pasa ese tiempo, el servidor proxy enviará la respuesta NXDOMAIN (Non-Existent Domain).
 
-- --log-format \<log_format>: Formato de salida en consola de las peticiones y respuestas hechas por el servidor.
+- --log-format \<log_format> : Formato de salida en consola de las peticiones y respuestas hechas por el servidor.
 
 - --log-prefix : Si incluir en los logs la hora del evento y otros metadatos.
 
