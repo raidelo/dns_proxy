@@ -37,8 +37,8 @@ Para ambas secciones: Si en el lugar del dominio, aparece una palabra, por ejemp
 - --logs-file \<logs_file> : Archivo en el cual guardar los registros de peticiones y respuestas que maneje el proxy. Se comportará de la siguiente manera:
     1. No se especifica la flag ni su argumento: Se guardarán los logs en un archivo con nombre por defecto `dns_logs.log`.
     2. Se especifica la flag con su argumento:
-        - El argumento está dentro de los valores `[true, 1, activate, on]`: Se guardarán los logs en un archivo con nombre por defecto `dns_logs.log`.
-        - El argumento está dentro de los valores `[false, 0, deactivate, off]`: No se guardarán los logs en un archivo.
+        - El argumento está dentro de los valores `[true, 1, activate, enable, on]`: Se guardarán los logs en un archivo con nombre por defecto `dns_logs.log`.
+        - El argumento está dentro de los valores `[false, 0, deactivate, disable, off]`: No se guardarán los logs en un archivo.
         - El argumento no está dentro de los valores anteriores: Se usará ese nombre de archivo como el nombre del archivo de logs.
 
 ### Ejemplo de archivo de configuración .ini
